@@ -10,6 +10,8 @@ function Login() {
   const navigate = useNavigate();
   const handleLoginGoogle = (res) => {
     let decoded = jwt_decode(res.credential);
+    localStorage.setItem("user", JSON.stringify(decoded));
+
     const { name, aud, picture } = decoded;
     const doc = {
       _id: aud,
