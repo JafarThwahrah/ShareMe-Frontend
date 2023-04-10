@@ -1,17 +1,48 @@
 import React, { useState } from "react";
 import { urlFor } from "../client";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDownloadForOffline } from "react-icons/md";
 import { fetchUser } from "../utilities/fetchUser";
+import { v4 as uuidv4 } from "uuid";
+import { client } from "../client";
+import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
+import { AiTwotoneDelete } from "react-icons/ai";
+
 function Pin({ pin: { image, postedBy, _id, destination, save } }) {
   const [postHovered, setPostHovered] = useState(false);
   const navigate = useNavigate();
   const userInfo = fetchUser();
-  let alreadySaved = !!save?.filter(
+
+  let alreadySaved = save?.filter(
     (item) => item?.postedBy?._id === userInfo?.aud
-  )?.length;
+  );
 
   alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
+
+  function deletePin(id) {
+    client.delete(id).then(() => window.location.reload());
+  }
+  function savePin(id) {
+    if (alreadySaved?.length === 0) {
+      client
+        .patch(id)
+        .setIfMissing({ save: [] })
+        .insert("after", "save[-1]", [
+          {
+            _key: uuidv4(),
+            userId: userInfo?.aud,
+            postedBy: {
+              _type: "postedBy",
+              _ref: userInfo?.aud,
+            },
+          },
+        ])
+        .commit()
+        .then(() => {
+          window.location.reload();
+        });
+    }
+  }
   return (
     <div className="m-2">
       <div
@@ -42,17 +73,61 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
               </div>
               {alreadySaved?.length !== 0 ? (
                 <button className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
-                  Saved
+                  {save?.length} Saved
                 </button>
               ) : (
-                <button className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    savePin(_id);
+                  }}
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                >
                   Save
+                </button>
+              )}
+            </div>
+            <div className="flex justify-between items-center gap-2 w-full">
+              {destination && (
+                <a
+                  href={destination}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:100 hover:shadow-md"
+                >
+                  <BsFillArrowUpRightCircleFill />
+                  {destination.length > 20
+                    ? destination.slice(8, 20)
+                    : destination.slice(8)}
+                </a>
+              )}
+              {postedBy?._id === userInfo.aud && (
+                <button
+                  className="bg-white p-2 opacity-70 hover:opacity-100 text-dark font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deletePin(_id);
+                  }}
+                >
+                  <AiTwotoneDelete />
                 </button>
               )}
             </div>
           </div>
         )}
       </div>
+      <Link
+        to={`user-profile/${userInfo?.aud}`}
+        className="flex gap-2 mt-2 items-center"
+      >
+        <img
+          className="w-8 h-8 rounded-full object-cover"
+          src={postedBy?.image}
+          alt="user-profile"
+        />
+        <p className="font-semibold capitalize">{postedBy?.userName}</p>
+      </Link>
     </div>
   );
 }
