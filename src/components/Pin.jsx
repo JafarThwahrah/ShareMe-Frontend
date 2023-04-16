@@ -101,7 +101,7 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
                     : destination.slice(8)}
                 </a>
               )}
-              {postedBy?._id === userInfo.aud && (
+              {postedBy?._id === userInfo?.aud && (
                 <button
                   className="bg-white p-2 opacity-70 hover:opacity-100 text-dark font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                   type="button"
