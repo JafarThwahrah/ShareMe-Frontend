@@ -77,8 +77,11 @@ function UserProfile() {
             </h1>
             <div className="absolute top-0 z-1 right-0 p-2">
               {userId === user._id && (
-                <button onClick={handleLogout}>
-                  <AiOutlineLogout color="red" fontSize={24} />
+                <button
+                  className="p-4 bg-red-500 rounded-md"
+                  onClick={handleLogout}
+                >
+                  <AiOutlineLogout color="white" fontSize={27} />
                 </button>
               )}
             </div>

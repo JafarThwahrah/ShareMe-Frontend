@@ -146,7 +146,14 @@ function PinDetails({ user }) {
           <MasonaryLayout pins={pins} />
         </>
       ) : (
-        <Spinner message="Loading more pins..." />
+        <>
+          <h2 className="text-center font-bold text-2xl mt-8 mb-4 ">
+            More Like this
+          </h2>
+          <h2 className="text-center text-xl">
+            There is no other pins from this Category!
+          </h2>
+        </>
       )}
     </>
   );
