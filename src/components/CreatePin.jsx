@@ -110,7 +110,7 @@ function CreatePin({ user }) {
                 <img
                   src={imageAsset?.url}
                   alt="uploaded"
-                  className="h-full w-full"
+                  className="h-full w-full object-cover"
                 />
                 <button
                   type="button"
