@@ -14,7 +14,7 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
   const userInfo = fetchUser();
 
   let alreadySaved = save?.filter(
-    (item) => item?.postedBy?._id === userInfo?.aud
+    (item) => item?.postedBy?._id === userInfo?.sub
   );
 
   alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
@@ -30,10 +30,10 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
         .insert("after", "save[-1]", [
           {
             _key: uuidv4(),
-            userId: userInfo?.aud,
+            userId: userInfo?.sub,
             postedBy: {
               _type: "postedBy",
-              _ref: userInfo?.aud,
+              _ref: userInfo?.sub,
             },
           },
         ])
@@ -96,12 +96,12 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
                   className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:100 hover:shadow-md"
                 >
                   <BsFillArrowUpRightCircleFill />
-                  {destination.length > 20
-                    ? destination.slice(8, 20)
+                  {destination.length > 10
+                    ? destination.slice(0, 8)
                     : destination.slice(8)}
                 </a>
               )}
-              {postedBy?._id === userInfo?.aud && (
+              {postedBy?._id === userInfo?.sub && (
                 <button
                   className="bg-white p-2 opacity-70 hover:opacity-100 text-dark font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                   type="button"
@@ -118,7 +118,7 @@ function Pin({ pin: { image, postedBy, _id, destination, save } }) {
         )}
       </div>
       <Link
-        to={`user-profile/${userInfo?.aud}`}
+        to={`user-profile/${userInfo?.sub}`}
         className="flex gap-2 mt-2 items-center"
       >
         <img
