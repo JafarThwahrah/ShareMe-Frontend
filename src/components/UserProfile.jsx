@@ -10,6 +10,7 @@ import {
 import { client } from "../client";
 import MasonaryLayout from "./MasonaryLayout";
 import Spinner from "./Spinner";
+import { fetchUser } from "../utilities/fetchUser";
 
 const activeBtnStyles =
   "bg-red-500 text-white font-bold p-2 rounded-full w-20 outline-none";
@@ -23,7 +24,7 @@ function UserProfile() {
   const [activeBtn, setActiveBtn] = useState("created");
   const navigate = useNavigate();
   const { userId } = useParams();
-
+  const loggedInUser = fetchUser();
   const randomImage =
     "https://source.unsplash.com/1600x900/?nature,photography,technology";
   useEffect(() => {
@@ -76,7 +77,7 @@ function UserProfile() {
               {user.userName}
             </h1>
             <div className="absolute top-0 z-1 right-0 p-2">
-              {userId === user._id && (
+              {userId === loggedInUser.sub && (
                 <button
                   className="p-4 bg-red-500 rounded-md"
                   onClick={handleLogout}
