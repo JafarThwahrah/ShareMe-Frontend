@@ -66,7 +66,7 @@ function PinDetails({ user }) {
           />
         </div>
         <div className="w-full p-5 flex-1 xl:min-w-620">
-          <div className="flex items-center justify-between">
+          <div className="flex">
             <div className="flex gap-2 items-center">
               <a
                 href={`${pinDetail.image?.asset?.url}?dl=`}
@@ -76,8 +76,13 @@ function PinDetails({ user }) {
                 <MdDownloadForOffline className="bg-white w-9 h-9 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none" />
               </a>
             </div>
-            <a href={pinDetail.destination} target="_blank" rel="noreferrer">
-              {pinDetail.destination}
+            <a
+              className="font-bold mt-2 ml-2"
+              href={pinDetail.destination}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Image Source Address
             </a>
           </div>
           <div>
@@ -117,7 +122,7 @@ function PinDetails({ user }) {
             <Link to={`/user-profile/${pinDetail.postedBy._id}`}>
               <img
                 className="w-10 h-10 rounded-full cursor-pointer"
-                src={pinDetail.postedBy?.image}
+                src={user?.image}
                 alt="user-profile"
               />
             </Link>
