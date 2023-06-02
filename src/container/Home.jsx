@@ -48,7 +48,7 @@ export const Home = () => {
           </Link>
         </div>
         {toggleSidebar && (
-          <div className="fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md animate-slide-in">
+          <div className="fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md animate-slide-in z-10">
             <div className="absolute w-full flex justify-end items-center p-2">
               <AiFillCloseCircle
                 fontSize={30}
